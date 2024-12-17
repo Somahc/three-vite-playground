@@ -6,14 +6,17 @@ import fragmentShader from "./shader/fragment.glsl?raw";
 const canvas = document.querySelector("canvas.webgl") as HTMLCanvasElement;
 
 const SIZE = 3000;
-const LENGTH = 1000;
+const LENGTH = 10000;
 
 const vertices: number[] = [];
 
 for (let i = 0; i < LENGTH; i++) {
-    const x = SIZE * (Math.random() - 0.5);
-    const y = SIZE * (Math.random() - 0.5);
-    const z = SIZE * (Math.random() - 0.5);
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+
+    const x = SIZE * Math.sin(phi) * Math.cos(theta);
+    const y = SIZE * Math.sin(phi) * Math.sin(theta);
+    const z = SIZE * Math.cos(phi);
 
     vertices.push(x, y, z);
 }
