@@ -29,6 +29,8 @@ const material = new THREE.PointsMaterial({
 
 const scene = new THREE.Scene();
 
+scene.background = new THREE.Color(0x111111);
+
 const mesh = new THREE.Points(geometry, material);
 scene.add(mesh);
 
@@ -59,11 +61,11 @@ const camera = new THREE.PerspectiveCamera(
     75,
     sizes.width / sizes.height,
     0.1,
-    100
+    5000
 );
-camera.position.x = 3;
-camera.position.y = 3;
-camera.position.z = 3;
+camera.position.x = 0;
+camera.position.y = 0;
+camera.position.z = 3000;
 scene.add(camera);
 
 // Controls
