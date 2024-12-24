@@ -16,23 +16,38 @@ const sizes = {
     pixelRatio: Math.min(window.devicePixelRatio, 2),
 };
 
-const loader = new GLTFLoader();
-
-// const gltf = await loader.loadAsync("./models/xmastree.glb");
-
 let particles: {
     geometry: THREE.BufferGeometry;
     material: THREE.ShaderMaterial;
     points: THREE.Points | null;
 } | null = null;
 
+const loader = new GLTFLoader();
+
 loader.load("./models/xmastree.glb", (gltf) => {
-    const position = gltf.scene.position;
+    console.log(
+        (gltf.scene.children[0] as THREE.Mesh).geometry.attributes.position
+    );
 
-    particles.positions = [];
+    const position = (gltf.scene.children[0] as THREE.Mesh).geometry.attributes
+        .position;
 
-    const array = position.toArray();
-    const newArray = new Float32Array(position.length);
+    const originalArray = position.array;
+
+    console.log(originalArray);
+
+    const newArray = new Float32Array(position.count * 3);
+
+    for (let i = 0; i < position.count; i++) {
+        const i3 = i * 3;
+        newArray[i3 + 0] = originalArray[i3 + 0];
+        newArray[i3 + 1] = originalArray[i3 + 1];
+        newArray[i3 + 2] = originalArray[i3 + 2];
+    }
+
+    const treePosition = new THREE.BufferAttribute(newArray, 3);
+
+    console.log(treePosition);
 
     particles = {
         geometry: new THREE.BufferGeometry(),
@@ -40,7 +55,7 @@ loader.load("./models/xmastree.glb", (gltf) => {
             vertexShader: vertexShader,
             fragmentShader: fragmentShader,
             uniforms: {
-                uSize: new THREE.Uniform(0.4),
+                uSize: new THREE.Uniform(0.25),
                 uResolution: new THREE.Uniform(
                     new THREE.Vector2(
                         sizes.width * sizes.pixelRatio,
@@ -56,8 +71,7 @@ loader.load("./models/xmastree.glb", (gltf) => {
 
     // Geometry
     particles.geometry = new THREE.BufferGeometry();
-    particles.geometry.setAttribute("");
-    particles.geometry.setIndex(null);
+    particles.geometry.setAttribute("position", treePosition);
 
     // Points
     particles.points = new THREE.Points(particles.geometry, particles.material);
