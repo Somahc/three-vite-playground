@@ -32,20 +32,7 @@ loader.load("./models/xmastree.glb", (gltf) => {
     const position = (gltf.scene.children[0] as THREE.Mesh).geometry.attributes
         .position;
 
-    const originalArray = position.array;
-
-    console.log(originalArray);
-
-    const newArray = new Float32Array(position.count * 3);
-
-    for (let i = 0; i < position.count; i++) {
-        const i3 = i * 3;
-        newArray[i3 + 0] = originalArray[i3 + 0];
-        newArray[i3 + 1] = originalArray[i3 + 1];
-        newArray[i3 + 2] = originalArray[i3 + 2];
-    }
-
-    const treePosition = new THREE.BufferAttribute(newArray, 3);
+    const treePosition = new THREE.BufferAttribute(position.array, 3);
 
     console.log(treePosition);
 
@@ -62,6 +49,8 @@ loader.load("./models/xmastree.glb", (gltf) => {
                         sizes.height * sizes.pixelRatio
                     )
                 ),
+                // uColorA: new THREE.Uniform(new THREE.Color("#ff7300")),
+                // uColorB: new THREE.Uniform(new THREE.Color("#0091ff")),
             },
             blending: THREE.AdditiveBlending,
             depthWrite: false,
